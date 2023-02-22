@@ -109,7 +109,7 @@ inquirer
                 }
                 console.log('Connected to the MySQL server.');
               });
-            db.query('SHOW TABLES', function (err, results) {
+            db.query('SELECT * FROM employee', function (err, results) {
                 if (error) {
                     console.error(err);
                   } else {
