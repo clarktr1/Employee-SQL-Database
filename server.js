@@ -10,10 +10,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-// Query database
-// db.query('SELECT * FROM students', function (err, results) {
-//   console.log(results);
-// });
+const db = mysql.createConnection(
+  {
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'employees_db'
+  }, 
+);
 
 // Default response for any other request (Not Found)
 app.use((req, res) => {
@@ -23,3 +27,5 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+module.exports = db;

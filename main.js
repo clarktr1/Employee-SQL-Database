@@ -1,17 +1,6 @@
-const { error } = require('console');
 const inquirer = require('inquirer');
-const mysql = require('mysql');
-const table = require('console.table');
-const { addEmployee } = require('./query-functions.js')
+const {addEmployee, addRole, updateEmployee, addDepartment, viewRoles, viewDepartments} = require('./query-functions.js');
 
-const db = mysql.createConnection(
-    {
-      host: 'localhost',
-      user: 'root',
-      password: 'root',
-      database: 'employees_db'
-    }, 
-  );
 
 const databasePrompt = () => {
 inquirer
@@ -64,17 +53,14 @@ inquirer
                 },
             ])
             .then((response) => {
+                console.log(response);
                 addEmployee(response);
+                databasePrompt();
             })
             break;
         case 'Add Role':
             inquirer
                 .prompt([
-                    {
-                        type: 'input',
-                        name: 'department',
-                        message: 'What is the name of the deparment?',
-                    },
                     {
                         type: 'input',
                         name: 'role',
@@ -92,24 +78,8 @@ inquirer
                     },
                 ])
                 .then((response) => {
-                    db.connect(function(err) {
-                        if (err) {
-                          return console.error('error: ' + err.message);
-                        }
-                        console.log('Connected to the MySQL server.');
-                      });
-                    db.query(
-                        `INSERT INTO employee (f_name, l_name, role, department, salary, manager)
-                        VALUES ("${response.first_name}", "${response.last_name}", "${response.role}", "NULL", "0", "${response.manager}");`, 
-                        function (err, results) {
-                        if (err) {
-                            console.error(err);
-                          } else {
-                            console.log(`${response.first_name} ${response.last_name} was added to the database.`)
-                            console.table(results);
-                            databasePrompt();
-                          }
-                        });
+                    addRole(response)
+                    databasePrompt();
                     });
                 break;
         case 'Add Department':
@@ -122,59 +92,19 @@ inquirer
                     },
                     ])
                     .then((response) =>{
-                    db.connect(function(err) {
-                        if (err) {
-                        return console.error('error: ' + err.message);
-                        }
-                        console.log('Connected to the MySQL server.');
-                    });
-                    db.query(
-                        `INSERT INTO department
-                        VALUES ("${response.department}");`, 
-                        function (err, results) {
-                        if (err) {
-                            console.error(err);
-                        } else {
-                            console.table(results);
-                            databasePrompt();
-                        }
-                    
-                        })
+                        addDepartment(response);
+                        databasePrompt()
                     });
                 break
+        case 'Update Employee Role':
+            updateEmployee();
+            break
         case 'View All Roles':
-            db.connect(function(err) {
-                if (err) {
-                  return console.error('error: ' + err.message);
-                }
-                console.log('Connected to the MySQL server.');
-              });
-            db.query('SELECT * FROM employee', function (err, results) {
-                if (err) {
-                    console.error(err);
-                  } else {
-                    console.table(results);
-                  }
-                });
-                db.end();
+            viewRoles(response);
                 break
         case 'View All Departments':
-            db.connect(function(err) {
-                if (err) {
-                  return console.error('error: ' + err.message);
-                }
-                console.log('Connected to the MySQL server.');
-              });
-            db.query(
-                `SELECT department FROM employee;`, 
-                function (err, results) {
-                if (err) {
-                    console.error(err);
-                  } else {
-                    console.table(results);
-                    databasePrompt();
-                  }
-                });
+            viewDepartments(response);
+            databasePrompt()
                 break
         case 'Exit':
             console.log('Thanks for using my app!');
