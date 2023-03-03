@@ -15,74 +15,12 @@ inquirer
 .then((response) => {
     switch (response.action) {
         case 'Add Employee':
-            inquirer
-            .prompt([
-                {
-                    type: 'input',
-                    message: 'What is the employee\'s first name?',
-                    name: 'first_name',
-                    validate: (input) => {
-                        if (!input) {
-                          return 'Name is required';
-                        } else if (!/^[a-z A-Z]+$/.test(input)) {
-                            return 'Name should only container letters';
-                        } return true
-                    },
-                },
-                {
-                    type: 'input',
-                    message: 'What is the employee\'s last name?',
-                    name: 'last_name',
-                    validate: (input) => {
-                        if (!input) {
-                          return 'Name is required';
-                        } else if (!/^[a-z A-Z]+$/.test(input)) {
-                            return 'Name should only container letters';
-                        } return true
-                    },
-                },
-                {
-                    type: 'list',
-                    message: 'What is the employee\'s role?',
-                    name: 'role',
-                    choices: ['Engineering', 'Finance', 'Legal', 'Sales', 'Service']
-                },
-                {
-                    type: 'list',
-                    message: 'Who is the employee\'s manager? Leave blank if none.',
-                    name: 'manager',
-                    choices: ['Terry Lancaster', 'Miranda Adams', 'Paul Everlong', 'John Paul']
-                },
-            ])
-            .then((response) => {
-                addEmployee(response);
-                returnToMainMenu();
-            })
+        addEmployee();   
+        returnToMainMenu();
             break;
         case 'Add Role':
-            inquirer
-                .prompt([
-                    {
-                        type: 'input',
-                        name: 'role',
-                        message: 'What is the role name?',
-                    },
-                    {
-                        type: 'input',
-                        name: 'salary',
-                        message: 'What is the salary?',
-                    },
-                    {
-                        type: 'list',
-                        name: 'department',
-                        message: 'What is the department name?',
-                        choices: ['Placeholder', 'Test']
-                    },
-                ])
-                .then((response) => {
-                    addRole(response)
-                    returnToMainMenu();
-                    });
+                addRole();
+                returnToMainMenu();
                 break;
         case 'Add Department':
             addDepartment();
@@ -90,13 +28,14 @@ inquirer
                 break
         case 'Update Employee Role':
             updateEmployee();
+            returnToMainMenu()
             break
         case 'View All Roles':
             viewRoles();
             returnToMainMenu();
                 break
         case 'View All Departments':
-            viewDepartments(response);
+            viewDepartments();
             returnToMainMenu()
                 break
         case 'Exit':
@@ -104,6 +43,7 @@ inquirer
             process.exit();         
         };
     });
+    
 };
 
 function returnToMainMenu() {
@@ -120,4 +60,5 @@ function returnToMainMenu() {
       }
     });
   };
+  
 main();
