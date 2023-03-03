@@ -2,38 +2,19 @@ const mysql = require('mysql');
 const db = require('./server.js')
 const inquirer = require('inquirer')
 
-
-function addEmployee(response){
-    db.connect(function(err) {
-        if (err) {
-          return console.error('error: ' + err.message);
-        }
-        console.log('Connected to the MySQL server.');
-      });
-    db.query(
-        `INSERT INTO employee (f_name, l_name, role, manager)
-        VALUES ("${response.first_name}", "${response.last_name}", "${response.role}", "${response.manager}");`, 
-        function (err, results) {
-        if (err) {
-            console.error(err);
-          } else {
-            console.log(`${response.role} was added to the database.`)
-            console.table(results);
-          }
-        });
-        db.end();
+function connect(){
+  db.connect(function(err) {
+    if (err) {
+      return console.error('error: ' + err.message);
+    }
+    console.log('Connected to the MySQL server.');
+  });
 }
 
-function addRole(response){
-    db.connect(function(err) {
-        if (err) {
-          return console.error('error: ' + err.message);
-        }
-        console.log('Connected to the MySQL server.');
-      });
+function addEmployee(response){
     db.query(
-        `INSERT INTO ROLE (role, department, salary)
-        VALUES (""${response.role}", "${response.salary}", "${response.manager}");`, 
+        `INSERT INTO employee (f_name, l_name, role, manager_id)
+        VALUES ("${response.first_name}", "${response.last_name}", "${response.role}", "${response.manager}");`, 
         function (err, results) {
         if (err) {
             console.error(err);
@@ -43,44 +24,48 @@ function addRole(response){
           }
         });
 }
-function addDepartment(response){
-    db.connect(function(err) {
-        if (err) {
-        return console.error('error: ' + err.message);
-        }
-        console.log('Connected to the MySQL server.');
-    });
-    db.query(
-        `INSERT INTO department
-        VALUES ("${response.department}");`, 
-        function (err, results) {
-        if (err) {
-            console.error(err);
-        } else {
-            console.table(results);
-            databasePrompt();
-        }
-    });
- }
+
+
+const getDepartment =
+  db.query(
+    `SELECT * FROM department;`, 
+    function (err, results) {
+    if (err) {
+        console.error(err);
+    }
+    for (let i in results) 
+    return results[i]
+});
+
+// function addRole(response){
+//     db.query(
+//         `INSERT INTO role (role, salary, department)
+//         VALUES ("${response.role}", "${response.salary}", "${response.department}");`, 
+//         function (err, results) {
+//         if (err) {
+//             console.error(err);
+//           } else {
+//             console.log(`${response.role} was added to the database.`)
+//             console.table(results);
+//           }
+//         });
+}
+// function addDepartment(response){
+//     db.query(
+//         `INSERT INTO department (department)
+//         VALUES ('${response.department}');`, 
+//         function (err, results) {
+//         if (err) {
+//             console.error(err);
+//         } else {
+//             console.table(results);
+//             console.log(`${response.department} added to department database!`)
+//         }
+//     });
+//  }
 function updateEmployee(){
   let employeeList = []
   let roleList = []
-    db.connect(function(err) {
-        if (err) {
-        return console.error('error: ' + err.message);
-        }
-        console.log('Connected to the MySQL server.');
-    });
-    db.query(`SELECT role FROM employee`,
-    function (err, results) {
-      if (err) {
-        console.error(err);
-      } else {
-        for (let i in results)
-        roleList = Array.from(new Set(results));
-        console.log(roleList)
-      }
-    })
     db.query(`SELECT id, f_name, l_name FROM employee;`,
     function (err, results) {
     if (err) {
@@ -91,7 +76,7 @@ function updateEmployee(){
           name:`${results[i].f_name} ${results[i].l_name}`,
           value: results[i].id,
         });
-        console.log(employeeList);
+        console.log(employeeList)
         inquirer
           .prompt([
             {
@@ -104,7 +89,7 @@ function updateEmployee(){
               type: 'list',
               name: 'role',
               message: 'What is the role?',
-              choices: removeAllListeners,
+              choices: ['Test', 'Test2'],
             }
           ])
           .then(response => {
@@ -120,7 +105,6 @@ function updateEmployee(){
               } else {
                 console.table(results);
               }
-              db.end()
             });
             
           })
@@ -128,15 +112,11 @@ function updateEmployee(){
       )}
     });
   };
+
+//Works
 function viewRoles(response){
-    db.connect(function(err) {
-        if (err) {
-          return console.error('error: ' + err.message);
-        }
-        console.log('Connected to the MySQL server.');
-      });
     db.query(
-        'SELECT * FROM employee', 
+        'SELECT * FROM role', 
         function (err, results) {
         if (err) {
             console.error(err);
@@ -144,15 +124,11 @@ function viewRoles(response){
             console.table(results);
           }
         });
-        db.end();
 }
+
+//Works
 function viewDepartments(response){
-    db.connect(function(err) {
-        if (err) {
-          return console.error('error: ' + err.message);
-        }
-        console.log('Connected to the MySQL server.');
-      });
+
     db.query(
         `SELECT * FROM department;`, 
         function (err, results) {
@@ -165,4 +141,4 @@ function viewDepartments(response){
         });
 }
 
-module.exports = {addEmployee, addRole, addDepartment, updateEmployee, viewRoles, viewDepartments}
+module.exports = {connect, getDepartment, addEmployee, addRole, addDepartment, updateEmployee, viewRoles, viewDepartments}

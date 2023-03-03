@@ -8,8 +8,8 @@ CREATE TABLE employee (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     f_name VARCHAR(100) NOT NULL,
     l_name VARCHAR(100) NOT NULL,
-    role VARCHAR(100) NOT NULL,
-    manager VARCHAR(100) NOT NULL
+    role_id int NOT NULL,
+    manager_id int NOT NULL
 );
 
 CREATE TABLE department (
