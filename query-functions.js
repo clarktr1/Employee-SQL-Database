@@ -2,15 +2,6 @@ const mysql = require('mysql');
 const db = require('./server.js')
 const inquirer = require('inquirer')
 
-function connect(){
-  db.connect(function(err) {
-    if (err) {
-      return console.error('error: ' + err.message);
-    }
-    console.log('Connected to the MySQL server.');
-  });
-}
-
 
 function connect(){
   db.connect(function(err) {
@@ -137,7 +128,7 @@ db.query(`SELECT * FROM employee WHERE manager_id = 0;`, function(err, results) 
                             console.log('Failed to add employee to the database.');
                         } else {
                             console.log(`${response.first_name} ${response.last_name} was added to the database.`);
-                            console.table(results);
+                            console.table(`/n${results}`);
                         }
 
                         db.end(); // Close the database connection
@@ -233,18 +224,6 @@ function viewRoles(){
         });
 }
 
-function getDepartment(){
-  db.query(`SELECT * FROM department`,
-  function(err, results){
-    if(err){
-      console.log(err)
-    } else {
-      console.table(results)
-    }
-  });
-
-}
-
 //Works
 function viewDepartments(response){
 
@@ -259,4 +238,24 @@ function viewDepartments(response){
         });
 }
 
-module.exports = {connect, getDepartment, addEmployee, addRole, addDepartment, updateEmployee, viewRoles, viewDepartments}
+function viewEmployees(){
+    db.query(
+        `SELECT employee.id, CONCAT(employee.f_name, ' ', employee.l_name) as employee, department.department, role.role, role.salary, CONCAT(manager.f_name, ' ', manager.l_name) AS manager_name
+        FROM employee
+        INNER JOIN role
+        ON employee.role_id = role.id 
+        INNER JOIN department
+        ON role.department_id = department.id
+        LEFT JOIN employee AS manager
+        ON employee.manager_id = manager.id;`,
+    function(err, results){
+        if(err){
+            console.error(err)
+        } else {
+            console.table(results)
+        }
+    }
+    )
+}
+
+module.exports = {connect, addEmployee, addRole, addDepartment, updateEmployee, viewRoles, viewDepartments, viewEmployees}
