@@ -2,9 +2,11 @@ const inquirer = require('inquirer');
 const {connect, getDepartment, addEmployee, addRole, updateEmployee, addDepartment, viewRoles, viewDepartments} = require('./query-functions.js');
 
 
-function main() {
+const main = async () => {
+let choice = ''
 connect();
-inquirer
+while (choice !== 'Exit'){
+const {action} = await inquirer
     .prompt([
     {   type: 'list',
         name: 'action',
@@ -12,38 +14,30 @@ inquirer
         choices: ['Add Employee',  'Add Role',  'Add Department', 'Update Employee Role', 'View All Roles','View All Departments', 'Exit' ],
     }
     ])
-.then((response) => {
-    switch (response.action) {
+    switch (action) {
         case 'Add Employee':
         addEmployee();   
-        returnToMainMenu();
             break;
         case 'Add Role':
                 addRole();
-                returnToMainMenu();
                 break;
         case 'Add Department':
             addDepartment();
-            returnToMainMenu()
                 break
         case 'Update Employee Role':
             updateEmployee();
-            returnToMainMenu()
             break
         case 'View All Roles':
             viewRoles();
-            returnToMainMenu();
                 break
         case 'View All Departments':
             viewDepartments();
-            returnToMainMenu()
                 break
         case 'Exit':
             console.log('Thanks for using my app!');
             process.exit();         
         };
-    });
-    
+    };
 };
 
 function returnToMainMenu() {

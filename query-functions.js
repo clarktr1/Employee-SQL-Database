@@ -255,7 +255,6 @@ function viewDepartments(response){
             console.error(err);
           } else {
             console.table(results);
-            databasePrompt();
           }
         });
 }

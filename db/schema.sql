@@ -4,22 +4,30 @@ CREATE DATABASE employees_db;
 
 USE employees_db;
 
-CREATE TABLE employee (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    f_name VARCHAR(100) NOT NULL,
-    l_name VARCHAR(100) NOT NULL,
-    role_id int NOT NULL,
-    manager_id int NOT NULL
+CREATE TABLE `employee` (
+	id INT(10) NOT NULL AUTO_INCREMENT,
+	f_name VARCHAR(100) NOT NULL,
+	l_name VARCHAR(100) NOT NULL,
+	role_id INT(10) NOT NULL,
+	manager_id INT(10) NOT NULL,
+	PRIMARY KEY ('id') USING BTREE,
+	INDEX role_id ('role_id') USING BTREE,
+	CONSTRAINT role_id FOREIGN KEY ('role_id') REFERENCES `role` ('id') ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-CREATE TABLE department (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    department VARCHAR (100) NOT NULL
-);
 
-CREATE TABLE role (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    role VARCHAR(100) NOT NULL,
-    salary INT,
-    department_id INT
+CREATE TABLE `department` (
+	id INT(10) NOT NULL AUTO_INCREMENT,
+	department VARCHAR(100) NOT NULL,
+	PRIMARY KEY ('id') USING BTREE
+)
+
+CREATE TABLE `role` (
+	id INT(10) NOT NULL AUTO_INCREMENT,
+	role VARCHAR(100) NOT NULL ,
+	salary INT(10) NULL DEFAULT NULL,
+	department_id INT(10) NULL DEFAULT NULL,
+	PRIMARY KEY (id) USING BTREE,
+	INDEX department_id ('department_id') USING BTREE,
+	CONSTRAINT department_id FOREIGN KEY ('department_id') REFERENCES department ('id') ON UPDATE NO ACTION ON DELETE NO ACTION
 );
