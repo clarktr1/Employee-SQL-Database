@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const db = require('./server.js')
 const inquirer = require('inquirer')
+const init = require('./main')
 
 
 function connect(){
@@ -57,8 +58,10 @@ function updateEmployee(){
                                 if(err){
                                     console.error(err)
                                 } else {
+                                    console.clear()
                                     console.table(results)
                                     console.log(`${(employeeList[response.employee -1].name)}\'s role has been updated!`)
+                                    init()
                                 }
                             }
                              )
@@ -128,9 +131,9 @@ db.query(`SELECT * FROM employee WHERE manager_id = 0;`, function(err, results) 
                             console.log('Failed to add employee to the database.');
                         } else {
                             console.log(`${response.first_name} ${response.last_name} was added to the database.`);
-                            console.table(`/n${results}`);
+                            console.table(results);
+                            main();
                         }
-
                         db.end(); // Close the database connection
                     });
                 });
@@ -138,7 +141,6 @@ db.query(`SELECT * FROM employee WHERE manager_id = 0;`, function(err, results) 
         });
     }
 });
-
 };
 
 function addRole(){
@@ -180,6 +182,7 @@ function addRole(){
                             } else {
                                 console.table(results);
                                 console.log(`${response.role} was added to the database!`)
+                              
                             }
                         });
                     });
@@ -209,7 +212,6 @@ function addDepartment(){
     db.end()
 });
 };
-
 
 //Works
 function viewRoles(){

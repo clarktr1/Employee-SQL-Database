@@ -3,27 +3,32 @@ const figlet = require('figlet')
 const {connect, addEmployee, addRole, updateEmployee, addDepartment, viewRoles, viewDepartments, viewEmployees} = require('./query-functions.js');
 
 
-const main = async () => {
-let choices = ''
-connect();
-figlet('Employee Database', async function (err, data) {
-    if (err) {
-        console.log('Error creating header:', err);
-    } else {
-        console.log(data);
 
-        while (choices !== 'Exit'){
-            const {action} = await inquirer
-                .prompt([
+function init() {
+    figlet('Employee Database', async function (err, data) {
+        if (err) {
+            console.log('Error creating header:', err);
+        } else {
+            console.log(data)
+        } main()
+    })
+};
+
+function main() {
+console.clear
+connect();
+  inquirer
+        .prompt([
                 {   type: 'list',
                     name: 'action',
                     message: 'Main Menu:',
                     choices: ['Add Employee',  'Add Role',  'Add Department', 'Update Employee Role', 'View All Roles','View All Departments','View All Employees', 'Exit' ],
                 }
                 ])
-                switch (action) {
+                .then ((response) => {
+                switch (response.action) {
                     case 'Add Employee':
-                        addEmployee();   
+                        addEmployee()
                         break;
                     case 'Add Role':
                         addRole();
@@ -47,10 +52,9 @@ figlet('Employee Database', async function (err, data) {
                         console.log('Thanks for using my app!');
                         process.exit();         
                     };
-                };
-    }
-});
-
+                })
 };
 
-main();
+init();
+
+exports.init = init
