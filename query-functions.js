@@ -62,7 +62,6 @@ function updateEmployee(){
                                     console.clear()
                                     console.table(results)
                                     console.log(`${(employeeList[response.employee -1].name)}\'s role has been updated!`)
-                            
                                 }
                             }
                              )

@@ -29,7 +29,9 @@ connect();
                 .then ((response) => {
                 switch (response.action) {
                     case 'Add Employee':
-                        addEmployee()
+                        addEmployee().then(() =>{
+                            init()
+                        })
                         break;
                     case 'Add Role':
                         addRole();
@@ -38,7 +40,8 @@ connect();
                         addDepartment();
                         break
                     case 'Update Employee Role':
-                        updateEmployee();
+                        updateEmployee()
+                        // init()
                         break
                     case 'View All Roles':
                         viewRoles();
@@ -55,7 +58,8 @@ connect();
                     };
                 })
                 .then((response) => {
-                    init()
+                    console.log('here')
+                    //init()
                 })
 };
 
