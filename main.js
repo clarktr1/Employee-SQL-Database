@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
-const figlet = require('figlet')
 const {connect, addEmployee, addRole, updateEmployee, addDepartment, viewRoles, viewDepartments, viewEmployees} = require('./query-functions.js');
+const figlet = require('figlet')
 
 
 
@@ -10,7 +10,8 @@ function init() {
             console.log('Error creating header:', err);
         } else {
             console.log(data)
-        } main()
+            main()
+        }
     })
 };
 
@@ -53,8 +54,9 @@ connect();
                         process.exit();         
                     };
                 })
+                .then((response) => {
+                    init()
+                })
 };
 
 init();
-
-exports.init = init

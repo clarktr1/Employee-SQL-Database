@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const db = require('./server.js')
 const inquirer = require('inquirer')
-const init = require('./main')
+
 
 
 function connect(){
@@ -11,7 +11,8 @@ function connect(){
     }
     console.log('Connected to the MySQL server.');
   });
-}
+};
+
 
 function updateEmployee(){
     const employeeList = [];
@@ -61,7 +62,7 @@ function updateEmployee(){
                                     console.clear()
                                     console.table(results)
                                     console.log(`${(employeeList[response.employee -1].name)}\'s role has been updated!`)
-                                    init()
+                            
                                 }
                             }
                              )
@@ -260,4 +261,4 @@ function viewEmployees(){
     )
 }
 
-module.exports = {connect, addEmployee, addRole, addDepartment, updateEmployee, viewRoles, viewDepartments, viewEmployees}
+module.exports = { connect, addEmployee, addRole, addDepartment, updateEmployee, viewRoles, viewDepartments, viewEmployees }
